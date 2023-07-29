@@ -1,16 +1,11 @@
+import MySQLdb
+from flask import Flask, render_template, request
+from flask_sqlalchemy import SQLAlchemy
+import config
 
-from flask import Flask, render_template, request, url_for
-import connect
-import base64
 
-app = Flask(__name__)
-TEMPLATES_AUTO_RELOAD = True
-SEND_FILE_MAX_AGE_DEFAULT = 0
-
-mongo = connect.Mongo()
-db = mongo.connect()
-mycol = db["user"]
-
+app = config.app
+db = config.db
 
 # 主页面
 @app.route('/', methods=['GET', 'POST'])
@@ -22,23 +17,20 @@ def home():
 def upload():
     # upload_file = request.files.get('file')
     # print(upload_file)
-
-    other = request.form["name"]
-    print(other)
-
-    mydict = {"id": request.form["id"], "name": request.form["name"], "balance": request.form["balance"],
-              "photo": request.form["show"]}
-    mycol.insert_one(mydict)
-
-    for x in mycol.find():
-        print(x)
-
+    mydict = config.Students(id=request.form["id"], name=request.form["name"], balance=request.form["balance"], photo=request.form["photo"])
+    with app.app_context():
+        db.session.add_all(mydict)
+        db.session.commit()
     return "sucessful"
-
 
 @app.route('/show', methods=['GET'])
 def show():
-    return render_template('data.html', mycol=mycol)
+    # cursor = db.cursor()
+    cursor = db.cursor(MySQLdb.cursors.DictCursor)  # 定义一个游标
+    cursor.execute("select * from Students")  # sql语句
+    datas = cursor.fetchall()  # 获取数据
+
+    return render_template('data.html', mycol=datas)
 
 
 if __name__ == '__main__':
