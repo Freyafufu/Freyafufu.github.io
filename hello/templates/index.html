@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>传输文件</title>
+  </head>
+  <body>
+    <h1>上传信息</h1>
+    <form action="/upload" method="post" enctype="multipart/form-data">
+      
+      <p>
+        填写id：<input type="text" name="id" id="id">
+      </p>
+      <p>
+        填写name：<input type="text" name="name" id="name">
+      </p>
+      <p>
+        填写balance：<input type="text" name="balance" id="balance">
+      </p>
+      <p>
+        上传photo：<input type="file" name="photo" accept="image/*">
+      </p>
+      <input type="submit" value="提交">
+    </form>
+  </body>
+</html>

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<title>展示数据</title>
+<style>
+    .content-image {
+        width: 150px; /* 设置图片宽度 */
+        height: 120px; /* 设置图片高度 */
+        object-fit: cover; /* 图片自适应填充 */
+    }
+</style>
+<h1>展示数据</h1>
+<body>
+    {% for content in contents %}
+        <div>
+            <p>ID: {{ content.id }}</p>
+            <p>Name: {{ content.name }}</p>
+            <p>Balance: {{ content.balance }}</p>
+            <p>Photo:<br><img src="{{ url_for('static', filename='uploads/' ~ 'id_' ~ content.id ~ '/' ~ content.photo) }}" controls class="content-image"></p>            
+        </div>
+        <hr>
+    {% endfor %}
+</body>
